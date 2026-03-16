@@ -922,6 +922,7 @@
   </footer>
 
   <script>
+    // ── Scroll reveal ──────────────────────────────────────────────────────
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
@@ -935,6 +936,85 @@
         if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' }); }
       });
     });
+
+    // ── Analytics ──────────────────────────────────────────────────────────
+    ;(function () {
+      const SB_URL  = 'https://yaqarscylnpmmbllfwxw.supabase.co';
+      const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhcWFyc2N5bG5wbW1ibGxmd3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzOTQ5MDIsImV4cCI6MjA0Nzk3MDkwMn0.KuYXx8b-5MKDLmW6DfoG5lyMZPwFMROlbnDC-vJZDd8';
+
+      // Stable session ID — resets on tab close, same as the app
+      let SID = sessionStorage.getItem('cq_landing_sid');
+      if (!SID) {
+        SID = crypto.randomUUID();
+        sessionStorage.setItem('cq_landing_sid', SID);
+      }
+
+      // device_type as a top-level column — must match the events table schema
+      const ua = navigator.userAgent;
+      const DEVICE = window.matchMedia('(display-mode: standalone)').matches ? 'pwa'
+        : /Mobi|Android/i.test(ua) ? 'mobile'
+        : /Tablet|iPad/i.test(ua) ? 'tablet'
+        : 'desktop';
+
+      // Fire-and-forget — never throws, never blocks UI
+      function logEvent(name, props) {
+        fetch(SB_URL + '/rest/v1/events', {
+          method: 'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'apikey':        SB_ANON,
+            'Authorization': 'Bearer ' + SB_ANON,
+            'Prefer':        'return=minimal',
+          },
+          body: JSON.stringify({
+            event_name:  name,
+            session_id:  SID,
+            app_version: 'landing',   // distinguishes from app events in the DB
+            device_type: DEVICE,      // top-level column — NOT inside properties
+            properties:  props || {},
+          }),
+        }).catch(function () {});
+      }
+
+      // 1 · Page view — once per session
+      if (!sessionStorage.getItem('cq_landing_pv')) {
+        var ref = '';
+        try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch(e) {}
+        logEvent('page_view', { referrer: ref });
+        sessionStorage.setItem('cq_landing_pv', '1');
+      }
+
+      // 2 · CTA / Open App clicks
+      document.querySelectorAll('a[href*="crediquestapp.arjunbatra.xyz"]').forEach(function(a) {
+        a.addEventListener('click', function () {
+          var txt = a.textContent.trim();
+          var btn = txt.includes('→') && txt.toLowerCase().includes('find') ? 'hero_open_app'
+            : txt.toLowerCase().includes('free') ? 'cta_banner'
+            : 'topbar_or_footer';
+          logEvent('cta_click', { button: btn });
+        });
+      });
+
+      // 3 · GitHub link click
+      document.querySelectorAll('a[href*="github.com"]').forEach(function(a) {
+        a.addEventListener('click', function () { logEvent('github_click', {}); });
+      });
+
+      // 4 · Scroll depth — fires once each at 25 / 50 / 75 / 90 %
+      var scrollFired = {};
+      window.addEventListener('scroll', function () {
+        var scrolled = window.scrollY + window.innerHeight;
+        var total    = document.documentElement.scrollHeight;
+        var pct      = Math.round((scrolled / total) * 100);
+        [25, 50, 75, 90].forEach(function (m) {
+          if (pct >= m && !scrollFired[m]) {
+            scrollFired[m] = true;
+            logEvent('scroll_depth', { depth: m });
+          }
+        });
+      }, { passive: true });
+
+    }());
   </script>
 </body>
 </html>
