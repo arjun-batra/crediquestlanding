@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Security ── -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none';" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=(), payment=(), usb=()" />
+
+  <!-- ── SEO ── -->
+  <title>CrediQuest — Best Credit Card Rewards Optimizer for Canadians</title>
+  <meta name="description" content="CrediQuest tells you which Canadian credit card earns the most rewards at any store or spending category — instantly. Compare 20 top cards across 600+ stores and 25 categories. Free, no sign-up." />
+  <meta name="keywords" content="credit card rewards Canada, best credit card for groceries Canada, maximize credit card points Canada, which credit card to use Canada, credit card optimizer Canada, Canadian credit card comparison, earn more points Canada, best rewards credit card Canada, credit card cashback Canada" />
+  <meta name="author" content="Arjun Batra" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="canonical" href="https://crediquest.arjunbatra.xyz/" />
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://crediquest.arjunbatra.xyz/" />
+  <meta property="og:title" content="CrediQuest — Which Credit Card Should You Swipe in Canada?" />
+  <meta property="og:description" content="Stop leaving rewards on the table. CrediQuest instantly tells you which of your Canadian credit cards earns the most at any store or category. Free, no login." />
+  <meta property="og:image" content="https://arjun-batra.github.io/crediquestapp/icons/icon-500x500.png" />
+  <meta property="og:locale" content="en_CA" />
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CrediQuest — Best Credit Card for Every Purchase in Canada" />
+  <meta name="twitter:description" content="Instantly find which of your Canadian credit cards earns the most rewards at any store or category. 20 cards, 600+ stores, free." />
+  <meta name="twitter:image" content="https://arjun-batra.github.io/crediquestapp/icons/icon-500x500.png" />
+
+  <!-- ── Schema.org ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CrediQuest",
+    "url": "https://crediquest.arjunbatra.xyz/",
+    "description": "Free Canadian credit card rewards optimizer. Not affiliated with any bank or card issuer.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+    "author": { "@type": "Person", "name": "Arjun Batra" },
+    "featureList": [
+      "Compare 20 top Canadian credit cards",
+      "Search 600+ stores across Canada",
+      "25 reward spending categories",
+      "Multiplier and cents-per-dollar views",
+      "Installable as a Progressive Web App",
+      "No sign-up required",
+      "No personal data collected"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which Canadian credit card earns the most rewards on groceries?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It depends on the cards you hold. CrediQuest compares your specific wallet and shows the card with the highest multiplier. Verify current earn rates directly with your card issuer." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is CrediQuest free to use?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Completely free, no account or sign-up required. No ads, no subscriptions." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I maximize credit card rewards in Canada?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Use a different card for different spending categories. CrediQuest automates this lookup. Always verify rates with your card issuer before making financial decisions." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does CrediQuest store my personal or financial information?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Only which card names you selected, saved in your browser local storage. Never transmitted to any server." }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── Fonts ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Brand */
+      --green:    #7bc428;
+      --green-d:  #5e9a1e;
+      --green-lt: #f0f8e5;
+      --green-md: #d9efac;
+      --blue:     #1a5ca8;
+      --orange:   #f47920;
+      --red:      #cc2229;
+
+      /* Light theme surface */
+      --bg:       #ffffff;
+      --bg2:      #f5f8f1;
+      --bg3:      #edf2e6;
+      --surface:  #ffffff;
+      --border:   #dde5d4;
+      --border-strong: #c3d4ae;
+
+      /* Type */
+      --ink:      #111a0d;
+      --ink2:     #2c3a22;
+      --muted:    #6b7a5e;
+
+      --font-display: 'Sora', sans-serif;
+      --font-body:    'Nunito', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+
+      --radius: 14px;
+      --shadow: 0 2px 8px rgba(60,80,30,0.07), 0 12px 32px rgba(60,80,30,0.09);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Skip nav */
+    .skip-nav {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--green); color: #fff;
+      padding: 0.5rem 1rem; border-radius: 4px;
+      font-weight: 700; z-index: 999; transition: top 0.2s;
+      text-decoration: none;
+    }
+    .skip-nav:focus { top: 1rem; }
+
+    /* ─────────── TOPBAR ─────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 66px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      object-fit: cover;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 800; font-size: 1.15rem;
+      color: var(--ink); letter-spacing: -0.02em;
+    }
+
+    .topbar-cta {
+      font-family: var(--font-body); font-weight: 700; font-size: 0.875rem;
+      color: #fff; background: var(--ink);
+      border: none; border-radius: 10px;
+      padding: 0.55rem 1.35rem; text-decoration: none;
+      transition: background 0.2s, transform 0.15s; white-space: nowrap;
+    }
+    .topbar-cta:hover { background: var(--ink2); transform: translateY(-1px); }
+
+    /* ─────────── HERO ─────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 3rem;
+      padding: 120px 5% 80px;
+      max-width: 1280px; margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: var(--font-mono); font-size: 0.73rem;
+      color: var(--green-d); background: var(--green-lt);
+      border: 1px solid var(--green-md);
+      border-radius: 100px; padding: 0.3rem 0.9rem;
+      margin-bottom: 1.75rem; letter-spacing: 0.05em;
+      text-transform: uppercase;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5.5vw, 5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em; margin-bottom: 1.5rem;
+      animation: fadeUp 0.85s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--green-d); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: var(--muted); line-height: 1.75;
+      max-width: 440px; margin-bottom: 2.25rem;
+      animation: fadeUp 0.85s 0.22s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 0.875rem; flex-wrap: wrap;
+      animation: fadeUp 0.85s 0.34s ease both;
+    }
+
+    .btn-primary {
+      font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+      color: #fff; background: var(--ink);
+      border: 2px solid var(--ink); border-radius: var(--radius);
+      padding: 0.875rem 1.875rem; text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--ink2); border-color: var(--ink2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+    .btn-ghost {
+      font-family: var(--font-body); font-weight: 600; font-size: 1rem;
+      color: var(--ink); background: transparent;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 0.875rem 1.875rem; text-decoration: none;
+      transition: border-color 0.2s, transform 0.15s; display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    /* Hero mock */
+    .hero-visual { display: flex; justify-content: center; }
+
+    .app-mock {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px; padding: 1.75rem;
+      box-shadow: var(--shadow);
+      width: 100%; max-width: 380px;
+      animation: fadeUp 0.9s 0.45s ease both;
+    }
+
+    .mock-header {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding-bottom: 1.2rem; border-bottom: 1px solid var(--border);
+      margin-bottom: 1.2rem;
+    }
+
+    .mock-store-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--green-lt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; flex-shrink: 0;
+    }
+
+    .mock-store-name { font-weight: 700; font-size: 0.975rem; }
+    .mock-store-cat {
+      font-family: var(--font-mono); font-size: 0.67rem;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.07em; margin-top: 2px;
+    }
+
+    .mock-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1rem; border-radius: 10px;
+      margin-bottom: 0.5rem; background: var(--bg2);
+      border: 1px solid transparent;
+    }
+    .mock-row.best { background: var(--green-lt); border-color: var(--green-md); }
+
+    .mock-card-nm { font-size: 0.84rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
+    .mock-card-sub { font-size: 0.69rem; color: var(--muted); margin-top: 2px; }
+    .mock-best-tag {
+      font-family: var(--font-mono); font-size: 0.58rem;
+      color: var(--green-d); background: var(--green-md);
+      border-radius: 4px; padding: 0.1rem 0.35rem; letter-spacing: 0.04em;
+    }
+    .mock-mult { font-family: var(--font-mono); font-weight: 500; }
+    .mock-row.best .mock-mult { color: var(--green-d); font-size: 1.1rem; }
+    .mock-row:not(.best) .mock-mult { color: var(--muted); font-size: 0.95rem; }
+
+    /* ─────────── STATS STRIP ─────────── */
+    .stats-strip {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-item {
+      flex: 1 1 160px; max-width: 250px;
+      padding: 2.5rem 1.5rem; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: var(--font-display); font-size: 2.6rem;
+      font-weight: 800; color: var(--green-d); line-height: 1;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.35rem; }
+
+    /* ─────────── SECTION BASE ─────────── */
+    .section { padding: 6.5rem 5%; max-width: 1280px; margin: 0 auto; }
+
+    .section-alt {
+      padding: 6.5rem 5%;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-alt-inner { max-width: 1280px; margin: 0 auto; }
+
+    .section-label {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--green-d); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 3.5vw, 2.85rem);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.12; max-width: 640px;
+    }
+    .section-title .accent { color: var(--green-d); }
+
+    .section-body {
+      font-size: 1rem; color: var(--muted);
+      max-width: 500px; margin-top: 1rem; line-height: 1.75;
+    }
+
+    /* ─────────── STEPS ─────────── */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2rem; position: relative; overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .step-card:hover { border-color: var(--border-strong); transform: translateY(-4px); box-shadow: var(--shadow); }
+    .step-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .step-card:hover::before { opacity: 1; }
+
+    .step-num {
+      font-family: var(--font-mono); font-size: 0.67rem;
+      color: var(--green-d); letter-spacing: 0.1em;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .step-num::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .step-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .step-h { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.45rem; }
+    .step-p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ─────────── FEATURES ─────────── */
+    .features-layout {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; margin-top: 3.5rem;
+    }
+
+    .feature-cell {
+      background: var(--bg2); padding: 2rem 1.875rem;
+      transition: background 0.2s;
+    }
+    .feature-cell:hover { background: var(--bg3); }
+
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; margin-bottom: 1rem;
+    }
+    .feature-icon.g  { background: var(--green-lt); }
+    .feature-icon.b  { background: #e6f0fb; }
+    .feature-icon.o  { background: #fef2e8; }
+    .feature-icon.r  { background: #fdeaeb; }
+
+    .feature-h { font-family: var(--font-display); font-weight: 700; font-size: 0.975rem; margin-bottom: 0.45rem; }
+    .feature-p { font-size: 0.865rem; color: var(--muted); line-height: 1.65; }
+
+    /* ─────────── CARDS GRID ─────────── */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(193px, 1fr));
+      gap: 0.65rem; margin-top: 3rem;
+    }
+
+    .card-chip {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; font-size: 0.8rem; font-weight: 600;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .card-chip:hover { border-color: var(--border-strong); background: var(--green-lt); transform: translateY(-2px); }
+
+    .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─────────── CATEGORY PILLS ─────────── */
+    .cats-grid { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 2.5rem; }
+
+    .cat-pill {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      padding: 0.45rem 1rem; border-radius: 100px;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--muted); cursor: default;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .cat-pill:hover { background: var(--green-lt); color: var(--green-d); border-color: var(--green-md); }
+
+    /* ─────────── FAQ ─────────── */
+    .faq-list { margin-top: 3rem; max-width: 720px; }
+
+    details { border-bottom: 1px solid var(--border); }
+
+    summary {
+      font-family: var(--font-display); font-weight: 700; font-size: 0.975rem;
+      padding: 1.25rem 0; cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 1rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '+'; font-size: 1.35rem; color: var(--green-d);
+      font-family: var(--font-mono); flex-shrink: 0;
+      transition: transform 0.2s; line-height: 1.2;
+    }
+    details[open] summary::after { transform: rotate(45deg); }
+
+    .faq-body { font-size: 0.9rem; color: var(--muted); line-height: 1.75; padding-bottom: 1.25rem; }
+
+    /* ─────────── CTA ─────────── */
+    .cta-section {
+      background: var(--ink); padding: 7rem 5%;
+      text-align: center;
+    }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.1;
+      margin-bottom: 1rem; color: #fff;
+    }
+    .cta-section h2 .accent { color: var(--green); }
+    .cta-section p { color: rgba(255,255,255,0.55); margin-bottom: 2.5rem; font-size: 1.05rem; }
+
+    .btn-white {
+      font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+      color: var(--ink); background: #fff; border: 2px solid #fff;
+      border-radius: var(--radius); padding: 0.9rem 2.25rem;
+      text-decoration: none; transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-white:hover { background: #f0f0f0; transform: translateY(-2px); }
+
+    .pwa-note {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 1.5rem; margin-top: 1.75rem;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: rgba(255,255,255,0.38);
+    }
+    .pwa-note span { display: flex; align-items: center; gap: 0.35rem; }
+
+    /* ─────────── LEGAL ─────────── */
+    .legal-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border); padding: 5rem 5%;
+    }
+    .legal-inner { max-width: 1280px; margin: 0 auto; }
+
+    .legal-intro {
+      font-size: 0.85rem; color: var(--muted); line-height: 1.7;
+      max-width: 700px; margin-top: 0.75rem; margin-bottom: 2.5rem;
+    }
+
+    .legal-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .legal-block h4 {
+      font-size: 0.76rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--ink); margin-bottom: 0.6rem;
+      font-family: var(--font-mono);
+    }
+    .legal-block p { font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─────────── FOOTER ─────────── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,0.42);
+      padding: 2rem 5%;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .footer-brand { display: flex; align-items: center; gap: 0.6rem; }
+    .footer-brand img { width: 26px; height: 26px; border-radius: 7px; opacity: 0.85; }
+    .footer-brand-name { font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 0.9rem; }
+
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; }
+    .footer-links a { color: rgba(255,255,255,0.42); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--green); }
+
+    .footer-right { color: rgba(255,255,255,0.28); font-size: 0.72rem; max-width: 380px; text-align: right; line-height: 1.55; }
+
+    /* ─────────── REVEAL ─────────── */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─────────── RESPONSIVE ─────────── */
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-sub, .hero-actions { max-width: 100%; justify-content: center; }
+      .hero-visual { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .features-layout { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .features-layout { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+      footer { flex-direction: column; }
+      .footer-right { text-align: left; max-width: 100%; }
+      .hero-actions { flex-direction: column; width: 100%; }
+      .btn-primary, .btn-ghost { text-align: center; width: 100%; }
+      .topbar { padding: 0 4%; }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Topbar ── -->
+  <header class="topbar" role="banner">
+    <a href="/" class="logo" aria-label="CrediQuest — Home">
+      <img
+        src="https://arjun-batra.github.io/crediquestapp/icons/icon-500x500.png"
+        alt="CrediQuest logo"
+        width="34" height="34"
+      />
+      <span class="logo-text">CrediQuest</span>
+    </a>
+    <a href="https://crediquest.arjunbatra.xyz/app"
+       class="topbar-cta"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Open the CrediQuest web app">
+      Open App →
+    </a>
+  </header>
+
+  <main id="main">
+
+    <!-- ── Hero ── -->
+    <section class="hero" aria-labelledby="hero-h1">
+      <div>
+        <div class="hero-eyebrow" role="text">🇨🇦 Built for Canadian wallets</div>
+
+        <h1 id="hero-h1">
+          Which card should you<br>
+          <span class="accent">swipe at checkout?</span>
+        </h1>
+
+        <p class="hero-sub">
+          Stop leaving rewards on the table. CrediQuest instantly shows which of your Canadian credit cards earns the most — at any store or spending category.
+        </p>
+
+        <div class="hero-actions">
+          <a href="https://crediquest.arjunbatra.xyz/app"
+             class="btn-primary"
+             target="_blank" rel="noopener noreferrer">
+            Find my best card →
+          </a>
+          <a href="#how-it-works" class="btn-ghost">How it works</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="app-mock" role="img" aria-label="Sample CrediQuest result: Loblaws grocery search with Amex Cobalt ranked first at 5x">
+          <div class="mock-header">
+            <div class="mock-store-icon">🛒</div>
+            <div>
+              <div class="mock-store-name">Loblaws</div>
+              <div class="mock-store-cat">Grocery</div>
+            </div>
+          </div>
+          <div class="mock-row best">
+            <div>
+              <div class="mock-card-nm">Amex Cobalt <span class="mock-best-tag">BEST</span></div>
+              <div class="mock-card-sub">Also earns 5× on dining &amp; delivery</div>
+            </div>
+            <div class="mock-mult">5×</div>
+          </div>
+          <div class="mock-row">
+            <div>
+              <div class="mock-card-nm">Scotia Gold Amex</div>
+              <div class="mock-card-sub">4× on Canadian grocery stores</div>
+            </div>
+            <div class="mock-mult">4×</div>
+          </div>
+          <div class="mock-row">
+            <div>
+              <div class="mock-card-nm">TD Aeroplan Visa Infinite</div>
+              <div class="mock-card-sub">3× on groceries</div>
+            </div>
+            <div class="mock-mult">3×</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Stats ── -->
+    <div class="stats-strip" role="region" aria-label="CrediQuest by the numbers">
+      <div class="stat-item reveal">
+        <div class="stat-num">20</div>
+        <div class="stat-label">Canadian credit cards</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.1s">
+        <div class="stat-num">629+</div>
+        <div class="stat-label">Stores &amp; merchants</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.2s">
+        <div class="stat-num">25</div>
+        <div class="stat-label">Spending categories</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.3s">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">No login. No ads.</div>
+      </div>
+    </div>
+
+    <!-- ── How it works ── -->
+    <section id="how-it-works" class="section" aria-labelledby="how-h2">
+      <div class="section-label">How it works</div>
+      <h2 id="how-h2" class="section-title">Three taps to your <span class="accent">best card</span></h2>
+      <p class="section-body">No spreadsheets. No bank portals. A fast lookup built around your actual wallet.</p>
+
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <div class="step-num">STEP 01</div>
+          <div class="step-icon" aria-hidden="true">💳</div>
+          <h3 class="step-h">Select your cards</h3>
+          <p class="step-p">Choose the cards you actually carry in Settings. Your selection is saved locally — nothing leaves your device.</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:.1s">
+          <div class="step-num">STEP 02</div>
+          <div class="step-icon" aria-hidden="true">🔍</div>
+          <h3 class="step-h">Search a store or category</h3>
+          <p class="step-p">Type any store name — Costco, Shoppers Drug Mart, Shell — or pick a spending category like Groceries or Travel.</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:.2s">
+          <div class="step-num">STEP 03</div>
+          <div class="step-icon" aria-hidden="true">🏆</div>
+          <h3 class="step-h">Swipe the winner</h3>
+          <p class="step-p">Your cards rank by multiplier or cents per dollar earned. The best card is always on top — no mental math required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Features ── -->
+    <div class="section-alt" id="features">
+      <div class="section-alt-inner">
+        <div class="section-label">Features</div>
+        <h2 class="section-title" id="features-h2">Built for Canadians who care about <span class="accent">every point</span></h2>
+
+        <div class="features-layout reveal">
+          <div class="feature-cell">
+            <div class="feature-icon g" aria-hidden="true">📊</div>
+            <h3 class="feature-h">Multiplier or ¢ per $1</h3>
+            <p class="feature-p">Toggle between reward multipliers and real cents-per-dollar so you can compare across different reward currencies fairly.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon b" aria-hidden="true">✈️</div>
+            <h3 class="feature-h">Store-specific bonus rates</h3>
+            <p class="feature-p">Some cards earn elevated rates at specific merchants — like Aeroplan-branded cards at Air Canada, or WestJet RBC at WestJet. CrediQuest applies these overrides automatically.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon g" aria-hidden="true">📱</div>
+            <h3 class="feature-h">Installs like a native app</h3>
+            <p class="feature-p">Add CrediQuest to your home screen on Android or iPhone. Offline-capable and instantly accessible every time you're at checkout.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon r" aria-hidden="true">💡</div>
+            <h3 class="feature-h">Top card explanation</h3>
+            <p class="feature-p">The #1 ranked card tells you what else it earns well on — so you know every situation where it's worth reaching for.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon b" aria-hidden="true">🔒</div>
+            <h3 class="feature-h">No account. No tracking.</h3>
+            <p class="feature-p">Your card selection stays in your browser's local storage. No sign-up, no tracking of which cards you own, no personal data sent anywhere.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon o" aria-hidden="true">🤝</div>
+            <h3 class="feature-h">Community-driven data</h3>
+            <p class="feature-p">Missing a store? Wrong rate? Use the Contribute tab to submit corrections and additions — CrediQuest gets better with every submission.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Supported cards ── -->
+    <section class="section" aria-labelledby="cards-h2">
+      <div class="section-label">Supported cards</div>
+      <h2 id="cards-h2" class="section-title">20 of Canada's most popular <span class="accent">rewards cards</span></h2>
+      <p class="section-body">From Amex Cobalt to TD Aeroplan — the cards Canadians actually use. All card and brand names are the property of their respective owners.</p>
+
+      <div class="cards-grid reveal">
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>Amex Cobalt</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>Amex Platinum</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>Amex Aeroplan</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>Amex Aeroplan Reserve</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>Amex SimplyCash Preferred</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>Scotia Gold Amex</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>Scotia Momentum Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>Scotia Passport Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#7bc428"></span>TD Aeroplan Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#7bc428"></span>TD First Class Travel Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#f47920"></span>CIBC Dividend Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>RBC Avion Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>WestJet RBC World Elite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>BMO Ascend World Elite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#1a5ca8"></span>BMO Eclipse Visa Infinite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#f47920"></span>PC Financial World Elite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#f47920"></span>Rogers World Elite Mastercard</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#f47920"></span>Tangerine Money-Back</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#cc2229"></span>Canadian Tire Triangle World Elite</div>
+        <div class="card-chip"><span class="chip-dot" style="background:#7bc428"></span>Neo Mastercard</div>
+      </div>
+    </section>
+
+    <!-- ── Categories ── -->
+    <div class="section-alt" id="categories">
+      <div class="section-alt-inner">
+        <div class="section-label">Spending categories</div>
+        <h2 class="section-title" id="cats-h2">25 categories. <span class="accent">Every way you spend.</span></h2>
+        <p class="section-body">From groceries to gas, dining to streaming — every major spending category Canadians use every day.</p>
+
+        <div class="cats-grid reveal">
+          <span class="cat-pill">Groceries</span>
+          <span class="cat-pill">Dining &amp; Restaurants</span>
+          <span class="cat-pill">Gas &amp; Transportation</span>
+          <span class="cat-pill">Travel</span>
+          <span class="cat-pill">Drugstores &amp; Pharmacy</span>
+          <span class="cat-pill">Entertainment</span>
+          <span class="cat-pill">Recurring Bills</span>
+          <span class="cat-pill">Streaming &amp; Subscriptions</span>
+          <span class="cat-pill">Hotels</span>
+          <span class="cat-pill">Airlines</span>
+          <span class="cat-pill">Car Rental</span>
+          <span class="cat-pill">Home Improvement</span>
+          <span class="cat-pill">Furniture &amp; Electronics</span>
+          <span class="cat-pill">Clothing &amp; Apparel</span>
+          <span class="cat-pill">Department Stores</span>
+          <span class="cat-pill">Online Shopping</span>
+          <span class="cat-pill">Wholesale Clubs</span>
+          <span class="cat-pill">Coffee Shops</span>
+          <span class="cat-pill">Fast Food</span>
+          <span class="cat-pill">Delivery Apps</span>
+          <span class="cat-pill">Pet Supplies</span>
+          <span class="cat-pill">Sporting Goods</span>
+          <span class="cat-pill">Parking</span>
+          <span class="cat-pill">Insurance</span>
+          <span class="cat-pill">Everything Else</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="section" aria-labelledby="faq-h2">
+      <div class="section-label">FAQ</div>
+      <h2 id="faq-h2" class="section-title">Common questions</h2>
+
+      <div class="faq-list">
+        <details>
+          <summary>Which Canadian credit card earns the most rewards on groceries?</summary>
+          <p class="faq-body">It depends on which cards you hold. The American Express Cobalt typically earns 5× on groceries and dining; the Scotiabank Gold American Express earns elevated rates at eligible Canadian grocery stores. CrediQuest ranks your specific wallet so you always see which of your cards comes out on top. <strong>Always verify current earn rates directly with your card issuer</strong> — rates can change at any time without notice.</p>
+        </details>
+        <details>
+          <summary>Is CrediQuest free to use?</summary>
+          <p class="faq-body">Yes, completely free. No subscription, no sign-up, no ads. Open it in your browser or install it as a Progressive Web App on your phone for instant access at checkout.</p>
+        </details>
+        <details>
+          <summary>How do I maximize my credit card rewards in Canada?</summary>
+          <p class="faq-body">The most effective strategy is card segmentation — using a different card for each spending category. CrediQuest automates the lookup so you never have to memorize each card's earn rates. This is general informational guidance only and does not constitute financial advice. Consult a qualified financial advisor for personalized recommendations.</p>
+        </details>
+        <details>
+          <summary>Does CrediQuest store any of my personal information?</summary>
+          <p class="faq-body">CrediQuest only stores which card names you have selected — not card numbers, expiry dates, PINs, or any account details. That selection is saved exclusively in your browser's local storage on your own device and is never transmitted externally. See the Legal &amp; Disclosures section below for full details.</p>
+        </details>
+        <details>
+          <summary>How accurate is the rewards data?</summary>
+          <p class="faq-body">Data is maintained on a best-effort basis using publicly available card issuer information. Earn rates are subject to change by issuers at any time without notice. CrediQuest makes no guarantee that displayed rates are current or complete. Always confirm rates directly with your card issuer before making any spending decisions.</p>
+        </details>
+        <details>
+          <summary>Can I install CrediQuest on my phone?</summary>
+          <p class="faq-body">Yes. On Android, tap the install prompt that appears in the app. On iPhone, open CrediQuest in Safari, tap the Share button, then select "Add to Home Screen." It works like a native app with no App Store required.</p>
+        </details>
+        <details>
+          <summary>What if my store isn't in the database?</summary>
+          <p class="faq-body">Use the Contribute tab inside the app to submit a missing store. You can also search by spending category to immediately find the right card for any merchant not yet in the database.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <section class="cta-section" aria-labelledby="cta-h2">
+      <div class="cta-inner">
+        <h2 id="cta-h2">Start earning more on <span class="accent">every purchase</span></h2>
+        <p>Free, no login, works on any device. Add it to your home screen and check it every time you're at checkout.</p>
+        <a href="https://crediquest.arjunbatra.xyz/app"
+           class="btn-white"
+           target="_blank" rel="noopener noreferrer">
+          Open CrediQuest — it's free →
+        </a>
+        <div class="pwa-note" aria-label="Platform support">
+          <span>✓ Any browser</span>
+          <span>✓ Android &amp; iPhone</span>
+          <span>✓ No account needed</span>
+          <span>✓ Offline capable</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Legal ── -->
+    <section class="legal-section" id="legal" aria-labelledby="legal-h2">
+      <div class="legal-inner">
+        <div class="section-label">Legal &amp; Disclosures</div>
+        <h2 id="legal-h2" style="font-family:var(--font-display);font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:0.25rem;">
+          Important notices — please read before using CrediQuest
+        </h2>
+        <p class="legal-intro">
+          CrediQuest is an independent personal project provided on a free, as-is basis. By using this website or the CrediQuest application, you acknowledge and agree to the following disclosures. Last updated: March 2026.
+        </p>
+
+        <div class="legal-grid">
+          <div class="legal-block">
+            <h4>No Affiliation or Endorsement</h4>
+            <p>CrediQuest is <strong>not affiliated with, endorsed by, sponsored by, or in any way connected to</strong> any credit card issuer, bank, financial institution, or merchant referenced in this application. All issuers — including but not limited to American Express, Scotiabank, TD Bank, CIBC, RBC, BMO, Rogers Bank, Tangerine, PC Financial, Canadian Tire Bank, WestJet, and Neo Financial — are independent entities with no involvement in this project. Inclusion of a card or merchant does not imply any commercial relationship.</p>
+          </div>
+          <div class="legal-block">
+            <h4>Trademark Notices</h4>
+            <p>All product names, card names, brand names, merchant names, and logos referenced in CrediQuest are the registered trademarks or trademarks of their respective owners. This includes but is not limited to Visa®, Mastercard®, American Express®, Aeroplan®, WestJet Rewards™, and PC Optimum™. Use of these names is solely for descriptive and informational identification purposes and does not imply any endorsement, affiliation, or partnership of any kind.</p>
+          </div>
+          <div class="legal-block">
+            <h4>Not Financial Advice</h4>
+            <p>The information provided by CrediQuest is for <strong>general informational and educational purposes only</strong>. Nothing in this application constitutes financial, investment, credit, tax, or legal advice. CrediQuest does not recommend any specific credit card or financial product for any individual. All credit products are subject to individual approval. Please consult a qualified financial advisor before making any financial decisions.</p>
+          </div>
+          <div class="legal-block">
+            <h4>Accuracy of Rewards Data</h4>
+            <p>Reward earn rates, multipliers, and category mappings are maintained on a best-effort basis using publicly available information. <strong>These rates are subject to change by card issuers at any time without notice.</strong> CrediQuest makes no warranty, express or implied, regarding the accuracy, completeness, or currency of any data. Always verify current earn rates directly with your card issuer before making any spending or financial decisions.</p>
+          </div>
+          <div class="legal-block">
+            <h4>Privacy Notice</h4>
+            <p>CrediQuest does not collect, transmit, or store any personally identifiable information on external servers. The only data persisted is your selected card names, stored locally in your browser on your own device. Anonymous, non-identifiable usage events (e.g., event counts, general usage patterns) may be logged to a private analytics database solely to improve the application. No names, contact details, card numbers, or any information that could identify you are ever collected.</p>
+          </div>
+          <div class="legal-block">
+            <h4>Limitation of Liability</h4>
+            <p>CrediQuest and its creator(s) shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from use of or reliance on this application, including missed rewards, suboptimal card usage, or financial loss. Use of CrediQuest is entirely at your own risk. This is a free, non-commercial personal project provided with no warranty of any kind, express or implied.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer role="contentinfo">
+    <div class="footer-brand">
+      <img
+        src="https://arjun-batra.github.io/crediquestapp/icons/icon-500x500.png"
+        alt="CrediQuest"
+        width="26" height="26"
+      />
+      <span class="footer-brand-name">CrediQuest</span>
+      <span>· v1.0 · Vibe Coded with ❤️ by Arjun</span>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="https://crediquest.arjunbatra.xyz/app" target="_blank" rel="noopener noreferrer">Open App</a>
+      <a href="https://github.com/arjun-batra/crediquest" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="#legal">Legal &amp; Disclosures</a>
+    </nav>
+    <div class="footer-right">
+      Not affiliated with any bank, card issuer, or merchant. All trademarks belong to their respective owners. For informational purposes only — not financial advice.
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
