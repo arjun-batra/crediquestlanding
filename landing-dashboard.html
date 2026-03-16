@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrediQuest — Landing Analytics</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg:        #f4f6f8;
+    --bg-card:   #ffffff;
+    --bg-hover:  #f8fafc;
+    --border:    #e4e8ee;
+    --border-hi: #cbd3de;
+    --green:       #5a9e1c;
+    --green-mid:   #7bc428;
+    --green-dim:   rgba(90,158,28,.09);
+    --blue:        #1a5ca8;
+    --blue-dim:    rgba(26,92,168,.09);
+    --orange:      #d9650e;
+    --orange-dim:  rgba(217,101,14,.09);
+    --red:         #dc2626;
+    --red-dim:     rgba(220,38,38,.08);
+    --text:     #0f172a;
+    --text-2:   #475569;
+    --text-3:   #94a3b8;
+    --sans: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --r-sm:  8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.04);
+}
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ── Password gate ──────────────────────────────────────────────────────── */
+#gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+}
+
+.gate-box {
+    width: 100%; max-width: 400px;
+    padding: 48px 40px 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    animation: fadeUp .3s ease both;
+}
+
+.gate-wordmark {
+    display: flex; align-items: center; gap: 10px;
+    justify-content: center; margin-bottom: 6px;
+}
+
+.gate-wordmark-dot {
+    width: 28px; height: 28px;
+    background: var(--green-mid); border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: #fff;
+}
+
+.gate-wordmark-text {
+    font-size: 18px; font-weight: 800;
+    color: var(--text); letter-spacing: -.03em;
+}
+
+.gate-sub {
+    text-align: center; font-size: 13px;
+    color: var(--text-2); margin-bottom: 36px;
+}
+
+.gate-field { margin-bottom: 12px; }
+
+.gate-field label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--text-2); margin-bottom: 6px; letter-spacing: .02em;
+}
+
+.gate-input {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: var(--r-sm); color: var(--text);
+    font-family: var(--mono); font-size: 15px;
+    letter-spacing: .06em; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.gate-input:focus {
+    border-color: var(--green-mid);
+    box-shadow: 0 0 0 3px rgba(123,196,40,.15);
+}
+
+.gate-btn {
+    width: 100%; padding: 12px;
+    background: var(--green); color: #fff;
+    border: none; border-radius: var(--r-sm);
+    font-family: var(--sans); font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background .15s, transform .1s;
+    margin-top: 4px; letter-spacing: .01em;
+}
+
+.gate-btn:hover  { background: #4a8516; }
+.gate-btn:active { transform: scale(.99); }
+
+.gate-error {
+    margin-top: 10px; font-size: 12px; font-family: var(--mono);
+    color: var(--red); text-align: center; display: none;
+}
+
+.gate-hint {
+    margin-top: 20px; font-size: 11px; text-align: center;
+    color: var(--text-3); font-family: var(--mono);
+}
+
+/* ── App ────────────────────────────────────────────────────────────────── */
+#app { display: none; }
+#app.visible { display: block; animation: fadeUp .3s ease both; }
+
+/* ── Topbar ─────────────────────────────────────────────────────────────── */
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    position: sticky; top: 0; z-index: 10;
+}
+
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+
+.topbar-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--text); letter-spacing: -.02em;
+}
+
+.topbar-divider {
+    width: 1px; height: 20px;
+    background: var(--border); margin: 0 12px;
+}
+
+.topbar-sub {
+    font-size: 13px; color: var(--text-2); font-weight: 500;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+
+.nav-link {
+    font-size: 12px; font-weight: 600; color: var(--text-2);
+    text-decoration: none; padding: 5px 12px;
+    border: 1px solid var(--border); border-radius: var(--r-sm);
+    transition: all .15s; white-space: nowrap;
+}
+.nav-link:hover { color: var(--text); border-color: var(--border-hi); }
+.nav-link.active {
+    background: var(--green-dim);
+    border-color: rgba(90,158,28,.25);
+    color: var(--green);
+}
+
+.live-badge {
+    display: flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    background: var(--green-dim);
+    border: 1px solid rgba(90,158,28,.2);
+    border-radius: 100px;
+    font-size: 11px; font-weight: 600;
+    color: var(--green); letter-spacing: .03em;
+    font-family: var(--mono);
+}
+
+.live-dot {
+    width: 6px; height: 6px;
+    background: var(--green-mid); border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+    0%,100% { opacity: 1; }
+    50%      { opacity: .4; }
+}
+
+.period-btns {
+    display: flex; gap: 2px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm); padding: 3px;
+}
+
+.period-btn {
+    padding: 5px 14px;
+    background: transparent; border: none;
+    border-radius: 6px; color: var(--text-2);
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all .15s;
+}
+
+.period-btn.active {
+    background: var(--bg-card); color: var(--text);
+    box-shadow: var(--shadow-sm); font-weight: 600;
+}
+
+.period-btn:not(.active):hover { color: var(--text); }
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+.content { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+.section-heading {
+    font-size: 11px; font-weight: 600;
+    color: var(--text-3); letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── KPI row ────────────────────────────────────────────────────────────── */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px; margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .2s, border-color .2s;
+    animation: fadeUp .35s ease both;
+}
+
+.kpi-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hi); }
+
+.kpi-icon {
+    width: 36px; height: 36px; border-radius: var(--r-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; margin-bottom: 14px;
+}
+
+.kpi-icon--green  { background: var(--green-dim); }
+.kpi-icon--blue   { background: var(--blue-dim); }
+.kpi-icon--orange { background: var(--orange-dim); }
+.kpi-icon--red    { background: var(--red-dim); }
+
+.kpi-label { font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; letter-spacing: .01em; }
+
+.kpi-value {
+    font-size: 32px; font-weight: 800; color: var(--text);
+    letter-spacing: -.04em; line-height: 1; font-family: var(--sans);
+}
+
+.kpi-sub { font-size: 12px; color: var(--text-3); margin-top: 5px; font-weight: 500; }
+
+/* ── Grids ──────────────────────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+/* ── Chart cards ────────────────────────────────────────────────────────── */
+.chart-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 22px 24px;
+    box-shadow: var(--shadow-sm); animation: fadeUp .4s ease both;
+}
+
+.chart-title {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    margin-bottom: 18px; letter-spacing: -.01em;
+}
+
+.chart-title-meta {
+    font-size: 11px; font-weight: 500; color: var(--text-3);
+    margin-left: 6px; font-family: var(--mono);
+}
+
+.chart-wrap { position: relative; }
+.chart-wrap canvas { display: block; }
+
+/* ── Bar lists ──────────────────────────────────────────────────────────── */
+.bar-list { display: flex; flex-direction: column; gap: 11px; }
+.bar-item { display: flex; align-items: center; gap: 10px; }
+
+.bar-rank {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    color: var(--text-3); width: 18px; text-align: right; flex-shrink: 0;
+}
+
+.bar-label {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+
+.bar-track { flex: 2; height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bar-fill  { height: 100%; border-radius: 3px; transition: width .65s cubic-bezier(.4,0,.2,1); }
+
+.bar-count {
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    color: var(--text-2); flex-shrink: 0; min-width: 24px; text-align: right;
+}
+
+/* ── Split rows ─────────────────────────────────────────────────────────── */
+.split-row { display: flex; flex-direction: column; gap: 13px; }
+.split-item { display: flex; align-items: center; gap: 10px; }
+.split-label { font-size: 13px; font-weight: 600; color: var(--text); min-width: 100px; }
+.split-bar-track { flex: 1; height: 7px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.split-bar-fill  { height: 100%; border-radius: 4px; transition: width .6s ease; }
+.split-val {
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    color: var(--text-2); min-width: 28px; text-align: right;
+}
+
+/* ── Shimmer ────────────────────────────────────────────────────────────── */
+.shimmer {
+    background: linear-gradient(90deg, var(--bg) 25%, #e8ecf0 50%, var(--bg) 75%);
+    background-size: 400px 100%; animation: shimmer 1.5s infinite;
+    border-radius: 6px; height: 18px;
+}
+
+@keyframes shimmer {
+    from { background-position: -400px 0; }
+    to   { background-position:  400px 0; }
+}
+
+/* ── Empty ──────────────────────────────────────────────────────────────── */
+.empty {
+    text-align: center; padding: 28px 16px;
+    color: var(--text-3); font-size: 13px; font-weight: 500;
+}
+.empty span { display: block; font-size: 24px; margin-bottom: 8px; }
+
+/* ── Error banner ───────────────────────────────────────────────────────── */
+.error-banner {
+    margin-bottom: 16px; padding: 12px 16px;
+    background: var(--red-dim); border: 1px solid rgba(220,38,38,.2);
+    border-radius: var(--r-sm); font-size: 13px; font-weight: 500; color: var(--red);
+}
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60%  { transform: translateX(-5px); }
+    40%,80%  { transform: translateX(5px); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 960px) {
+    .content { padding: 20px 16px; }
+    .topbar  { padding: 0 16px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .topbar-divider, .topbar-sub { display: none; }
+    .nav-link span { display: none; }
+}
+@media (max-width: 540px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .kpi-value { font-size: 26px; }
+    .period-btn { padding: 5px 9px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Password gate ── -->
+<div id="gate">
+    <div class="gate-box">
+        <div class="gate-wordmark">
+            <img src="https://crediquest.arjunbatra.xyz/icon.png" alt="CrediQuest"
+                 style="width:28px;height:28px;border-radius:7px;object-fit:cover;"
+                 onerror="this.outerHTML='<div class=&quot;gate-wordmark-dot&quot;>CQ</div>'">
+            <span class="gate-wordmark-text">CrediQuest</span>
+        </div>
+        <p class="gate-sub">Landing page analytics</p>
+        <form id="login-form" autocomplete="on" onsubmit="return false">
+            <div class="gate-field">
+                <label for="password">Password</label>
+                <input
+                    type="password" id="password" name="password"
+                    class="gate-input" placeholder="••••••••••"
+                    autocomplete="current-password" autofocus
+                >
+            </div>
+            <button type="submit" class="gate-btn" id="pw-btn">Continue →</button>
+        </form>
+        <p class="gate-error" id="pw-error">Incorrect password — try again</p>
+        <p class="gate-hint">Same password as App Analytics</p>
+    </div>
+</div>
+
+<!-- ── Dashboard ── -->
+<div id="app">
+
+    <nav class="topbar">
+        <div class="topbar-brand">
+            <img src="https://crediquest.arjunbatra.xyz/icon.png" alt="CrediQuest"
+                 style="width:26px;height:26px;border-radius:6px;object-fit:cover;"
+                 onerror="this.style.display='none'">
+            <span class="topbar-title">CrediQuest</span>
+            <div class="topbar-divider"></div>
+            <span class="topbar-sub">Landing Analytics</span>
+        </div>
+        <div class="topbar-right">
+            <a class="nav-link active" href="#">🌐&nbsp;Landing</a>
+            <a class="nav-link" href="https://crediquestapp.arjunbatra.xyz/dashboard.html">📱&nbsp;App</a>
+            <a class="nav-link" href="https://crediquestapp.arjunbatra.xyz/suggestions.html">💌&nbsp;Suggestions</a>
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                Live
+            </div>
+            <div class="period-btns">
+                <button class="period-btn" data-hours="6">6h</button>
+                <button class="period-btn" data-hours="12">12h</button>
+                <button class="period-btn" data-hours="24">24h</button>
+                <button class="period-btn" data-hours="168">7d</button>
+                <button class="period-btn active" data-hours="720">30d</button>
+                <button class="period-btn" data-hours="2160">90d</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+
+        <!-- KPIs -->
+        <p class="section-heading">Overview</p>
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon--green">👁️</div>
+                <div class="kpi-label">Page Views</div>
+                <div class="kpi-value" id="kpi-views">—</div>
+                <div class="kpi-sub">total impressions</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon--blue">👥</div>
+                <div class="kpi-label">Unique Visitors</div>
+                <div class="kpi-value" id="kpi-visitors">—</div>
+                <div class="kpi-sub">by session ID</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon--green">🚀</div>
+                <div class="kpi-label">App Opens</div>
+                <div class="kpi-value" id="kpi-cta">—</div>
+                <div class="kpi-sub">CTA button clicks</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon--orange">📦</div>
+                <div class="kpi-label">GitHub Clicks</div>
+                <div class="kpi-value" id="kpi-github">—</div>
+                <div class="kpi-sub">repo link taps</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon--red">📜</div>
+                <div class="kpi-label">Avg Scroll Depth</div>
+                <div class="kpi-value" id="kpi-scroll">—</div>
+                <div class="kpi-sub">of page reached</div>
+            </div>
+        </div>
+
+        <!-- Visitors chart + CTA split + Device split -->
+        <p class="section-heading">Traffic</p>
+        <div class="grid-3">
+            <div class="chart-card">
+                <div class="chart-title" id="sessions-title">Daily visitors</div>
+                <div class="chart-wrap" style="height:176px">
+                    <canvas id="chart-sessions"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">CTA clicks <span class="chart-title-meta">by button</span></div>
+                <div class="split-row" id="cta-split">
+                    <div class="shimmer"></div>
+                    <div class="shimmer" style="margin-top:4px"></div>
+                    <div class="shimmer" style="margin-top:4px"></div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Device type</div>
+                <div class="split-row" id="device-split">
+                    <div class="shimmer"></div>
+                    <div class="shimmer" style="margin-top:4px"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referrers + Scroll depth -->
+        <p class="section-heading">Engagement</p>
+        <div class="grid-2">
+            <div class="chart-card">
+                <div class="chart-title">Traffic sources <span class="chart-title-meta">by referrer</span></div>
+                <div class="bar-list" id="referrer-list">
+                    <div class="shimmer"></div>
+                    <div class="shimmer" style="margin-top:6px"></div>
+                    <div class="shimmer" style="margin-top:6px"></div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Scroll depth <span class="chart-title-meta">sessions by milestone</span></div>
+                <div class="bar-list" id="scroll-list">
+                    <div class="shimmer"></div>
+                    <div class="shimmer" style="margin-top:6px"></div>
+                    <div class="shimmer" style="margin-top:6px"></div>
+                    <div class="shimmer" style="margin-top:6px"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const SUPABASE_URL  = 'https://yaqarscylnpmmbllfwxw.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhcWFyc2N5bG5wbW1ibGxmd3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzOTQ5MDIsImV4cCI6MjA0Nzk3MDkwMn0.KuYXx8b-5MKDLmW6DfoG5lyMZPwFMROlbnDC-vJZDd8';
+
+Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+Chart.defaults.font.size   = 11;
+Chart.defaults.color       = '#94a3b8';
+
+let sessionsChart = null;
+let activeHours   = 720;
+
+// ── Period toggle ────────────────────────────────────────────────────────────
+document.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeHours = Number(btn.dataset.hours);
+        loadAll(activeHours);
+    });
+});
+
+// ── RPC helper ───────────────────────────────────────────────────────────────
+async function rpc(fn, params = {}) {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type':  'application/json',
+                'apikey':        SUPABASE_ANON,
+                'Authorization': `Bearer ${SUPABASE_ANON}`,
+            },
+            body: JSON.stringify(params),
+        });
+        if (!res.ok) { console.error('[landing-dash]', fn, res.status); return null; }
+        return res.json();
+    } catch(e) {
+        console.error('[landing-dash] network error', fn, e.message);
+        return null;
+    }
+}
+
+// ── Render helpers — same pattern as dashboard.html ──────────────────────────
+function fmt(n) {
+    if (n === null || n === undefined) return '—';
+    const v = Number(n);
+    if (isNaN(v)) return '—';
+    return v >= 1000 ? (v / 1000).toFixed(1) + 'k' : String(v);
+}
+
+function renderBarList(containerId, rows, labelKey, countKey, color) {
+    const el = document.getElementById(containerId);
+    if (!rows || rows.length === 0) {
+        el.innerHTML = '<div class="empty"><span>📭</span>No data yet</div>';
+        return;
+    }
+    const max = Math.max(...rows.map(r => Number(r[countKey]) || 0));
+    el.innerHTML = rows.map((r, i) => `
+        <div class="bar-item">
+            <span class="bar-rank">${i + 1}</span>
+            <span class="bar-label" title="${r[labelKey] || '—'}">${r[labelKey] || '—'}</span>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:${max ? Math.round((r[countKey]/max)*100) : 0}%;background:${color}"></div>
+            </div>
+            <span class="bar-count">${r[countKey]}</span>
+        </div>
+    `).join('');
+}
+
+function renderSplitRow(containerId, items) {
+    const el    = document.getElementById(containerId);
+    const total = items.reduce((s, i) => s + i.value, 0);
+    if (total === 0) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
+    el.innerHTML = items.map(item => `
+        <div class="split-item">
+            <span class="split-label">${item.label}</span>
+            <div class="split-bar-track">
+                <div class="split-bar-fill" style="width:${Math.round((item.value/total)*100)}%;background:${item.color}"></div>
+            </div>
+            <span class="split-val">${item.value}</span>
+        </div>
+    `).join('');
+}
+
+function renderSessionsChart(data, hours) {
+    const canvas = document.getElementById('chart-sessions');
+    if (!data || data.length === 0) {
+        canvas.parentElement.innerHTML = '<div class="empty"><span>📈</span>No data yet</div>';
+        return;
+    }
+    if (sessionsChart) sessionsChart.destroy();
+    const isSubDay = hours <= 24;
+
+    const labels = data.map(r => {
+        const d = new Date(r.bucket);
+        return isSubDay
+            ? d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' })
+            : d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+    });
+
+    sessionsChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                data: data.map(d => Number(d.sessions)),
+                backgroundColor: 'rgba(90,158,28,.12)',
+                borderColor:     '#7bc428',
+                borderWidth:     1.5,
+                borderRadius:    4,
+                hoverBackgroundColor: 'rgba(90,158,28,.22)',
+            }],
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#ffffff', borderColor: '#e4e8ee', borderWidth: 1,
+                    titleColor: '#0f172a', bodyColor: '#475569',
+                    padding: 10, cornerRadius: 8,
+                    callbacks: {
+                        title: i => i[0].label,
+                        label: i => `  ${i.raw} visitor${i.raw !== 1 ? 's' : ''}`,
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    grid:   { display: false },
+                    ticks:  { color: '#94a3b8', maxTicksLimit: isSubDay ? 12 : 8, maxRotation: 0, font: { size: 11 } },
+                    border: { display: false },
+                },
+                y: {
+                    grid:        { color: '#f1f5f9', lineWidth: 1 },
+                    ticks:       { color: '#94a3b8', stepSize: 1, font: { size: 11 } },
+                    border:      { display: false, dash: [3, 3] },
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+}
+
+// ── Load all ─────────────────────────────────────────────────────────────────
+async function loadAll(hours) {
+    ['kpi-views','kpi-visitors','kpi-cta','kpi-github','kpi-scroll'].forEach(id => {
+        document.getElementById(id).textContent = '—';
+    });
+    document.querySelectorAll('.error-banner').forEach(b => b.remove());
+
+    const periodLabel = hours <= 24
+        ? `Visitors by hour (last ${hours}h)`
+        : `Daily visitors (last ${hours / 24 | 0}d)`;
+    document.getElementById('sessions-title').textContent = periodLabel;
+
+    const [summary, sessions, referrers, cta, scroll, devices] = await Promise.all([
+        rpc('get_landing_summary',             { hours_back: hours }),
+        rpc('get_landing_sessions',            { hours_back: hours }),
+        rpc('get_landing_referrers',           { hours_back: hours }),
+        rpc('get_landing_cta_breakdown',       { hours_back: hours }),
+        rpc('get_landing_scroll_distribution', { hours_back: hours }),
+        rpc('get_landing_devices',             { hours_back: hours }),
+    ]);
+
+    // KPIs
+    if (summary && summary.length) {
+        const r = summary[0];
+        document.getElementById('kpi-views').textContent    = fmt(r.total_pageviews);
+        document.getElementById('kpi-visitors').textContent = fmt(r.unique_sessions);
+        document.getElementById('kpi-cta').textContent      = fmt(r.cta_clicks);
+        document.getElementById('kpi-github').textContent   = fmt(r.github_clicks);
+        document.getElementById('kpi-scroll').textContent   = r.avg_scroll_depth != null ? r.avg_scroll_depth + '%' : '—';
+    }
+
+    // Sessions chart
+    renderSessionsChart(sessions || [], hours);
+
+    // CTA split
+    const ctaLabelMap = { hero_open_app: 'Hero button', cta_banner: 'Bottom CTA', topbar_or_footer: 'Nav / Footer', other: 'Other' };
+    const ctaColors   = ['#7bc428','#1a5ca8','#d9650e','#dc2626'];
+    renderSplitRow('cta-split',
+        cta && cta.length
+            ? cta.map((r, i) => ({ label: ctaLabelMap[r.button] || r.button || 'Unknown', value: Number(r.clicks), color: ctaColors[i % 4] }))
+            : []
+    );
+
+    // Device split
+    const devColors = ['#7bc428','#1a5ca8','#d9650e','#94a3b8'];
+    renderSplitRow('device-split',
+        devices && devices.length
+            ? devices.map((r, i) => ({ label: r.device, value: Number(r.sessions), color: devColors[i % 4] }))
+            : []
+    );
+
+    // Referrers bar list
+    renderBarList('referrer-list', referrers || [], 'referrer', 'sessions', '#1a5ca8');
+
+    // Scroll depth bar list
+    renderBarList('scroll-list', scroll || [], 'depth_bucket', 'sessions', '#7bc428');
+
+    // Error banner
+    if ([summary, sessions, referrers, cta, scroll, devices].some(r => r === null)) {
+        const banner = document.createElement('div');
+        banner.className = 'error-banner';
+        banner.textContent = '⚠ One or more panels failed to load — refresh to retry.';
+        document.querySelector('.content').prepend(banner);
+    }
+}
+
+function initDashboard() { loadAll(activeHours); }
+
+// ── Password gate — same hash + sessionStorage key as dashboard.html ──────────
+const PW_HASH = 'b9e8a4b2a66942e36df89b44041ea2e0ec3f536ced01c2919af65986d4f8a3c7';
+
+async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function unlock() {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    initDashboard();
+}
+
+if (sessionStorage.getItem('cq_dash_unlocked') === '1') {
+    unlock();
+} else {
+    const pwInput = document.getElementById('password');
+    const pwError = document.getElementById('pw-error');
+    const form    = document.getElementById('login-form');
+
+    async function attemptUnlock() {
+        const hash = await sha256(pwInput.value);
+        if (hash === PW_HASH) {
+            sessionStorage.setItem('cq_dash_unlocked', '1');
+            unlock();
+        } else {
+            pwError.style.display = 'block';
+            pwInput.value = '';
+            pwInput.focus();
+            pwInput.style.animation = 'none';
+            pwInput.offsetHeight;
+            pwInput.style.animation = 'shake .35s ease';
+            setTimeout(() => { pwError.style.display = 'none'; }, 3000);
+        }
+    }
+
+    form.addEventListener('submit', attemptUnlock);
+    document.getElementById('pw-btn').addEventListener('click', attemptUnlock);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); attemptUnlock(); } });
+}
+</script>
+</body>
+</html>
