@@ -460,7 +460,6 @@
       .grid-2   { grid-template-columns: 1fr; }
       .page     { padding: 1rem 1rem 4rem; }
       .period-bar { padding: 0.875rem 1rem 0; }
-      /* Topbar: stack into two rows */
       .topbar {
         height: auto;
         flex-wrap: wrap;
@@ -469,19 +468,10 @@
       }
       .topbar-brand   { flex: 1 1 auto; }
       .topbar-divider { display: none; }
-      .topbar-nav {
-        flex: 0 0 auto;        /* sits next to brand on row 1 */
-        order: 2;
-      }
-      .topbar-right {
-        flex: 0 0 100%;        /* second row */
-        order: 3;
-        justify-content: flex-end;
-      }
-      /* Hide text labels — keep emoji icons only */
+      .topbar-nav { flex: 0 0 auto; order: 2; }
+      .topbar-right { flex: 0 0 100%; order: 3; justify-content: flex-end; }
       .nav-tab span.hide-sm { display: none; }
       .nav-tab { padding: 0.3rem 0.5rem; }
-      /* Hide last-updated text — keep refresh button */
       .last-updated { display: none; }
     }
     @media (max-width: 420px) {
@@ -525,12 +515,10 @@
       <a class="nav-tab active" href="landing-dashboard.html">
         🌐 <span class="hide-sm">Landing</span>
       </a>
-      <a class="nav-tab" href="https://crediquestapp.arjunbatra.xyz/dashboard.html"
-         target="_blank" rel="noopener noreferrer">
-        📱 <span class="hide-sm">App</span>
+      <a class="nav-tab" href="app-dashboard.html">
+        📱 <span class="hide-sm">App Dashboard</span>
       </a>
-      <a class="nav-tab" href="https://crediquestapp.arjunbatra.xyz/suggestions.html"
-         target="_blank" rel="noopener noreferrer">
+      <a class="nav-tab" href="user-suggestions.html">
         💌 <span class="hide-sm">Suggestions</span>
       </a>
     </nav>
@@ -634,21 +622,31 @@
 'use strict'
 
 // ── Config ──────────────────────────────────────────────────────
-const SB_URL  = 'https://yaqarscylnpmmbllfwxw.supabase.co'
-const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhcWFyc2N5bG5wbW1ibGxmd3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzOTQ5MDIsImV4cCI6MjA0Nzk3MDkwMn0.KuYXx8b-5MKDLmW6DfoG5lyMZPwFMROlbnDC-vJZDd8'
-const PW_HASH    = 'b9e8a4b2a66942e36df89b44041ea2e0ec3f536ced01c2919af65986d4f8a3c7'
-const SESS_KEY   = 'cq_dash_unlocked'
+const SB_URL      = 'https://yaqarscylnpmmbllfwxw.supabase.co'
+const SB_ANON     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhcWFyc2N5bG5wbW1ibGxmd3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzOTQ5MDIsImV4cCI6MjA0Nzk3MDkwMn0.KuYXx8b-5MKDLmW6DfoG5lyMZPwFMROlbnDC-vJZDd8'
+const PW_HASH     = 'b9e8a4b2a66942e36df89b44041ea2e0ec3f536ced01c2919af65986d4f8a3c7'
+const AUTH_KEY    = 'cq_dash_unlocked_until'
+const AUTH_TTL_MS = 8 * 60 * 60 * 1000 // 8 hours
 
 let currentHours = 720
 let charts = {}
 
 // ── Auth ─────────────────────────────────────────────────────────
+function isUnlocked() {
+  const until = localStorage.getItem(AUTH_KEY)
+  return until && Number(until) > Date.now()
+}
+
+function writeAuth() {
+  localStorage.setItem(AUTH_KEY, String(Date.now() + AUTH_TTL_MS))
+}
+
 async function checkPassword() {
   const raw = document.getElementById('pw-input').value
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw))
   const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('')
   if (hash === PW_HASH) {
-    sessionStorage.setItem(SESS_KEY, '1')
+    writeAuth()
     unlock()
   } else {
     document.getElementById('login-error').textContent = 'Incorrect password.'
@@ -666,7 +664,8 @@ function unlock() {
   loadAll(currentHours)
 }
 
-if (sessionStorage.getItem(SESS_KEY) === '1') unlock()
+// All three analytics pages are on the same domain — localStorage is shared natively
+if (isUnlocked()) unlock()
 
 // ── Period ────────────────────────────────────────────────────────
 function setPeriod(hours) {
