@@ -454,22 +454,20 @@
       .grid-2-1 { grid-template-columns: 1fr; }
       .grid-3   { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
       .kpi-row  { grid-template-columns: 1fr 1fr; }
       .grid-3   { grid-template-columns: 1fr; }
       .grid-2   { grid-template-columns: 1fr; }
       .page     { padding: 1rem 1rem 4rem; }
       .period-bar { padding: 0.875rem 1rem 0; }
       .topbar {
-        height: auto;
-        flex-wrap: wrap;
-        padding: 10px 1rem;
-        gap: 6px;
+        height: auto; flex-wrap: wrap;
+        padding: 10px 1rem; gap: 6px;
       }
       .topbar-brand   { flex: 1 1 auto; }
       .topbar-divider { display: none; }
-      .topbar-nav { flex: 0 0 auto; order: 2; }
-      .topbar-right { flex: 0 0 100%; order: 3; justify-content: flex-end; }
+      .topbar-nav     { flex: 0 0 auto; order: 2; }
+      .topbar-right   { flex: 0 0 100%; order: 3; justify-content: flex-end; }
       .nav-tab span.hide-sm { display: none; }
       .nav-tab { padding: 0.3rem 0.5rem; }
       .last-updated { display: none; }
@@ -664,7 +662,6 @@ function unlock() {
   loadAll(currentHours)
 }
 
-// All three analytics pages are on the same domain — localStorage is shared natively
 if (isUnlocked()) unlock()
 
 // ── Period ────────────────────────────────────────────────────────
